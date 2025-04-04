@@ -4,7 +4,7 @@ import React from "react";
 const Logo = () => {
   return (
     <>
-      <h1 className="text-3xl text-teal-700">GlowGlam</h1>
+      <h1 className="text-3xl text-teal-700">Trendify</h1>
     </>
   );
 };
