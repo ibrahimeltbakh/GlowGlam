@@ -17,16 +17,19 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   };
 };
 
-const ProductPage = async ({ params }: PageProps) => {
-  let product: Product | null = null;
-
+const fetchProduct = async (id: string): Promise<Product | null> => {
   try {
-    const response = await fetch(`https://dummyjson.com/products/${params.id}`);
+    const response = await fetch(`https://dummyjson.com/products/${id}`);
     if (!response.ok) throw new Error("Failed to fetch product");
-    product = await response.json();
+    return await response.json();
   } catch (error) {
     console.error("Error fetching product", error);
+    return null;
   }
+};
+
+const ProductPage = async ({ params }: PageProps) => {
+  const product = await fetchProduct(params.id);
 
   if (!product) {
     return <p>Product not found</p>;
