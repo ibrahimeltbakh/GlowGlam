@@ -1,3 +1,4 @@
+import { GetServerSideProps } from "next";
 import { Product } from "@/types/Product";
 import AddToCart from "@/components/Buttons/AddToCart";
 import React from "react";
@@ -5,6 +6,16 @@ import React from "react";
 interface PageProps {
   params: { id: string };
 }
+
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const { id } = context.params as { id: string };
+
+  return {
+    props: {
+      params: { id },
+    },
+  };
+};
 
 const ProductPage = async ({ params }: PageProps) => {
   let product: Product | null = null;
@@ -58,9 +69,7 @@ const ProductPage = async ({ params }: PageProps) => {
           </p>
           <p className="text-sm text-gray-500">Brand: {product.brand}</p>
           <p className="text-sm text-gray-500">Stock: {product.stock}</p>
-          <p className="text-sm text-gray-500 mt-2">
-            Rating: {product.rating} {/* Updated to match the new type */}
-          </p>
+          <p className="text-sm text-gray-500 mt-2">Rating: {product.rating}</p>
           <AddToCart product={product} />
         </div>
       </div>
