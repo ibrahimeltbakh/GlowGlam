@@ -1,5 +1,5 @@
+// app/products/[id]/page.tsx
 import React from "react";
-import axios from "axios";
 
 interface Product {
   id: number;
@@ -22,12 +22,11 @@ const ProductPage = async ({ params }: { params: { id: string } }) => {
   let product: Product | null = null;
 
   try {
-    const response = await axios.get(
-      `https://dummyjson.com/products/${params.id}`
-    );
-    product = response.data;
+    const response = await fetch(`https://dummyjson.com/products/${params.id}`);
+    if (!response.ok) throw new Error("Failed to fetch product");
+    product = await response.json();
   } catch (error) {
-    console.log("Error fetching product", error);
+    console.error("Error fetching product", error);
   }
 
   if (!product) {
