@@ -1,24 +1,12 @@
-// app/products/[id]/page.tsx
+import { Product } from "@/types/Product";
+import AddToCart from "@/components/Buttons/AddToCart";
 import React from "react";
 
-interface Product {
-  id: number;
-  title: string;
-  description: string;
-  category: string;
-  price: number;
-  discountPercentage: number;
-  rating: {
-    rate: number;
-    count: number;
-  };
-  stock: number;
-  brand: string;
-  thumbnail: string;
-  images: string[];
+interface PageProps {
+  params: { id: string };
 }
 
-const ProductPage = async ({ params }: { params: { id: string } }) => {
+const ProductPage = async ({ params }: PageProps) => {
   let product: Product | null = null;
 
   try {
@@ -71,11 +59,9 @@ const ProductPage = async ({ params }: { params: { id: string } }) => {
           <p className="text-sm text-gray-500">Brand: {product.brand}</p>
           <p className="text-sm text-gray-500">Stock: {product.stock}</p>
           <p className="text-sm text-gray-500 mt-2">
-            Rating: {product.rating.rate} ({product.rating.count} reviews)
+            Rating: {product.rating} {/* Updated to match the new type */}
           </p>
-          <button className="bg-blue-500 text-white py-2 px-4 rounded mt-4">
-            Add to Cart
-          </button>
+          <AddToCart product={product} />
         </div>
       </div>
     </div>
