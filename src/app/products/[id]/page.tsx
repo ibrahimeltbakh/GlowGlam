@@ -5,22 +5,7 @@ interface ProductParams {
   id: string;
 }
 
-interface PageProps {
-  params: ProductParams;
-}
-
-const fetchProduct = async (id: string): Promise<Product | null> => {
-  try {
-    const response = await fetch(`https://dummyjson.com/products/${id}`);
-    if (!response.ok) throw new Error("Failed to fetch product");
-    return await response.json();
-  } catch (error) {
-    console.error("Error fetching product", error);
-    return null;
-  }
-};
-
-const ProductPage = async ({ params }: PageProps) => {
+const ProductPage = async ({ params }: { params: ProductParams }) => {
   const product = await fetchProduct(params.id);
 
   if (!product) {
@@ -71,5 +56,17 @@ const ProductPage = async ({ params }: PageProps) => {
     </div>
   );
 };
+
+// Move fetchProduct outside the component
+async function fetchProduct(id: string): Promise<Product | null> {
+  try {
+    const response = await fetch(`https://dummyjson.com/products/${id}`);
+    if (!response.ok) throw new Error("Failed to fetch product");
+    return await response.json();
+  } catch (error) {
+    console.error("Error fetching product", error);
+    return null;
+  }
+}
 
 export default ProductPage;
