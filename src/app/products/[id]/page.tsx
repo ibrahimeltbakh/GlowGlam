@@ -1,9 +1,8 @@
-// src/app/products/[id]/page.tsx
-
 import { Product } from "@/types/Product";
 import AddToCart from "@/components/Buttons/AddToCart";
 import { notFound } from "next/navigation";
 
+// Define the type for the params object
 type Props = {
   params: {
     id: string;
