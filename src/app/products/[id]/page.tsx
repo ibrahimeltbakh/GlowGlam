@@ -1,9 +1,12 @@
 import { Product } from "@/types/Product";
 import AddToCart from "@/components/Buttons/AddToCart";
-import React from "react";
+
+interface ProductParams {
+  id: string;
+}
 
 interface PageProps {
-  params: { id: string };
+  params: ProductParams;
 }
 
 const fetchProduct = async (id: string): Promise<Product | null> => {
