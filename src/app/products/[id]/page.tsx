@@ -1,30 +1,24 @@
-import { Metadata } from "next";
+// src/app/products/[id]/page.tsx
+
 import { Product } from "@/types/Product";
 import AddToCart from "@/components/Buttons/AddToCart";
+import { notFound } from "next/navigation";
 
-// ✅ استخدم النوع ده لكتابة الـ props
-interface ProductPageProps {
+type Props = {
   params: {
     id: string;
   };
-}
+};
 
-export async function generateMetadata({
-  params,
-}: ProductPageProps): Promise<Metadata> {
-  return {
-    title: `Product ${params.id}`,
-  };
-}
-
-const ProductPage = async ({ params }: ProductPageProps) => {
+export default async function ProductPage({ params }: Props) {
   const product = await fetchProduct(params.id);
 
-  if (!product) return <p>Product not found</p>;
+  if (!product) return notFound();
 
   return (
     <div className="p-8">
       <div className="flex flex-col md:flex-row items-center">
+        {/* Product Images */}
         <div className="flex flex-col items-center">
           <img
             src={product.thumbnail}
@@ -42,6 +36,8 @@ const ProductPage = async ({ params }: ProductPageProps) => {
             ))}
           </div>
         </div>
+
+        {/* Product Details */}
         <div className="ml-8">
           <h1 className="text-2xl font-bold">{product.title}</h1>
           <p className="text-gray-600 mt-2">{product.description}</p>
@@ -56,23 +52,23 @@ const ProductPage = async ({ params }: ProductPageProps) => {
           </p>
           <p className="text-sm text-gray-500">Brand: {product.brand}</p>
           <p className="text-sm text-gray-500">Stock: {product.stock}</p>
-          <p className="text-sm text-gray-500 mt-2">Rating: {product.rating}</p>
+          <p className="text-sm text-gray-500 mt-2">
+            Rating: {product.rating.rate} ({product.rating.count} reviews)
+          </p>
           <AddToCart product={product} />
         </div>
       </div>
     </div>
   );
-};
+}
 
 async function fetchProduct(id: string): Promise<Product | null> {
   try {
     const response = await fetch(`https://dummyjson.com/products/${id}`);
-    if (!response.ok) throw new Error("Failed to fetch product");
+    if (!response.ok) throw new Error("Failed to fetch");
     return await response.json();
   } catch (error) {
-    console.error("Error fetching product", error);
+    console.error(error);
     return null;
   }
 }
-
-export default ProductPage;
