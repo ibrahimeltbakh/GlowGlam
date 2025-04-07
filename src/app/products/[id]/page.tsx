@@ -1,17 +1,26 @@
 import { Product } from "@/types/Product";
 import AddToCart from "@/components/Buttons/AddToCart";
+import { Metadata } from "next";
 
-// Define the shape of the params object for the dynamic route
-type ProductParams = {
-  id: string;
+// Dynamic route params type
+type Props = {
+  params: {
+    id: string;
+  };
 };
 
-// Use inline typing for the params prop
-const ProductPage = async ({ params }: { params: ProductParams }) => {
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const product = await fetchProduct(params.id);
+  return {
+    title: product?.title || "Product Not Found",
+  };
+}
+
+const ProductPage = async ({ params }: Props) => {
   const product = await fetchProduct(params.id);
 
   if (!product) {
-    return <p>Product not found</p>;
+    return <p className="text-red-600 text-center mt-10">Product not found</p>;
   }
 
   return (
