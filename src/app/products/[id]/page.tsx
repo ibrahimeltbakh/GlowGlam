@@ -1,10 +1,12 @@
 import { Product } from "@/types/Product";
 import AddToCart from "@/components/Buttons/AddToCart";
 
-interface ProductParams {
+// Define the shape of the params object for the dynamic route
+type ProductParams = {
   id: string;
-}
+};
 
+// Use inline typing for the params prop
 const ProductPage = async ({ params }: { params: ProductParams }) => {
   const product = await fetchProduct(params.id);
 
@@ -57,7 +59,6 @@ const ProductPage = async ({ params }: { params: ProductParams }) => {
   );
 };
 
-// Move fetchProduct outside the component
 async function fetchProduct(id: string): Promise<Product | null> {
   try {
     const response = await fetch(`https://dummyjson.com/products/${id}`);
