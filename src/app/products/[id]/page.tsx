@@ -52,9 +52,7 @@ export default async function ProductPage({ params }: Props) {
           </p>
           <p className="text-sm text-gray-500">Brand: {product.brand}</p>
           <p className="text-sm text-gray-500">Stock: {product.stock}</p>
-          <p className="text-sm text-gray-500 mt-2">
-            Rating: {product.rating.rate} ({product.rating.count} reviews)
-          </p>
+          <p className="text-sm text-gray-500 mt-2">Rating: {product.rating}</p>
           <AddToCart product={product} />
         </div>
       </div>
