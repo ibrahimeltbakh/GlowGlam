@@ -1,32 +1,30 @@
+import { Metadata } from "next";
 import { Product } from "@/types/Product";
 import AddToCart from "@/components/Buttons/AddToCart";
-import { Metadata } from "next";
 
-// Dynamic route params type
-type Props = {
+// ✅ استخدم النوع ده لكتابة الـ props
+interface ProductPageProps {
   params: {
     id: string;
   };
-};
+}
 
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const product = await fetchProduct(params.id);
+export async function generateMetadata({
+  params,
+}: ProductPageProps): Promise<Metadata> {
   return {
-    title: product?.title || "Product Not Found",
+    title: `Product ${params.id}`,
   };
 }
 
-const ProductPage = async ({ params }: Props) => {
+const ProductPage = async ({ params }: ProductPageProps) => {
   const product = await fetchProduct(params.id);
 
-  if (!product) {
-    return <p className="text-red-600 text-center mt-10">Product not found</p>;
-  }
+  if (!product) return <p>Product not found</p>;
 
   return (
     <div className="p-8">
       <div className="flex flex-col md:flex-row items-center">
-        {/* Product Images */}
         <div className="flex flex-col items-center">
           <img
             src={product.thumbnail}
@@ -44,8 +42,6 @@ const ProductPage = async ({ params }: Props) => {
             ))}
           </div>
         </div>
-
-        {/* Product Details */}
         <div className="ml-8">
           <h1 className="text-2xl font-bold">{product.title}</h1>
           <p className="text-gray-600 mt-2">{product.description}</p>
