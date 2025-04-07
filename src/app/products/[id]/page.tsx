@@ -1,4 +1,3 @@
-import { GetServerSideProps } from "next";
 import { Product } from "@/types/Product";
 import AddToCart from "@/components/Buttons/AddToCart";
 import React from "react";
@@ -6,16 +5,6 @@ import React from "react";
 interface PageProps {
   params: { id: string };
 }
-
-export const getServerSideProps: GetServerSideProps = async (context) => {
-  const { id } = context.params as { id: string };
-
-  return {
-    props: {
-      params: { id },
-    },
-  };
-};
 
 const fetchProduct = async (id: string): Promise<Product | null> => {
   try {
