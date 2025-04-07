@@ -2,17 +2,27 @@ import { Product } from "@/types/Product";
 import AddToCart from "@/components/Buttons/AddToCart";
 import { notFound } from "next/navigation";
 
-// Define the type for the params object
-type Props = {
-  params: {
-    id: string;
-  };
+interface PageProps {
+  params: { id: string }; // Use the correct type for params
+}
+
+const fetchProduct = async (id: string): Promise<Product | null> => {
+  try {
+    const response = await fetch(`https://dummyjson.com/products/${id}`);
+    if (!response.ok) throw new Error("Failed to fetch product");
+    return await response.json();
+  } catch (error) {
+    console.error("Error fetching product", error);
+    return null;
+  }
 };
 
-export default async function ProductPage({ params }: Props) {
+const ProductPage = async ({ params }: PageProps) => {
   const product = await fetchProduct(params.id);
 
-  if (!product) return notFound();
+  if (!product) {
+    return notFound();
+  }
 
   return (
     <div className="p-8">
@@ -57,15 +67,6 @@ export default async function ProductPage({ params }: Props) {
       </div>
     </div>
   );
-}
+};
 
-async function fetchProduct(id: string): Promise<Product | null> {
-  try {
-    const response = await fetch(`https://dummyjson.com/products/${id}`);
-    if (!response.ok) throw new Error("Failed to fetch");
-    return await response.json();
-  } catch (error) {
-    console.error(error);
-    return null;
-  }
-}
+export default ProductPage;
