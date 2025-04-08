@@ -1,27 +1,35 @@
+"use client";
+
 import { Product } from "@/types/Product";
+import { useParams } from "next/navigation";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
 import AddToCart from "@/components/Buttons/AddToCart";
-import { notFound } from "next/navigation";
 
-interface PageProps {
-  params: { id: string }; // Use the correct type for params
-}
+const ProductPage = () => {
+  const { id } = useParams();
+  const [product, setProduct] = useState<Product | null>(null);
 
-const fetchProduct = async (id: string): Promise<Product | null> => {
-  try {
-    const response = await fetch(`https://dummyjson.com/products/${id}`);
-    if (!response.ok) throw new Error("Failed to fetch product");
-    return await response.json();
-  } catch (error) {
-    console.error("Error fetching product", error);
-    return null;
-  }
-};
+  useEffect(() => {
+    // Fetch product details for the selected ID
+    const fetchProduct = async () => {
+      try {
+        const response = await axios.get(
+          `https://dummyjson.com/products/${id}`
+        );
+        setProduct(response.data);
+      } catch (error) {
+        console.error("Error fetching product:", error);
+      }
+    };
 
-const ProductPage = async ({ params }: PageProps) => {
-  const product = await fetchProduct(params.id);
+    if (id) {
+      fetchProduct();
+    }
+  }, [id]);
 
   if (!product) {
-    return notFound();
+    return <p>Loading product details...</p>;
   }
 
   return (
