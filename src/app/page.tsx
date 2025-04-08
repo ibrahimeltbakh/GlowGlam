@@ -54,9 +54,10 @@ export default function Home() {
   }
   return (
     <main className="container mx-auto text-center mt-10">
-      <h1 className="text-4xl font-bold">Welcome to GlowGlam</h1>
+      <h1 className="text-4xl font-bold">Welcome to Trendify</h1>
       <p className="mt-4 text-lg">
-        Your one-stop shop for all things beauty and glamour!
+        Your one-stop shop for all things trendy! Discover the latest in
+        fashion, electronics, and more.
       </p>
 
       <div className="mt-8">
