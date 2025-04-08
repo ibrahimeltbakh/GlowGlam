@@ -1,26 +1,25 @@
 import { useQuery } from "@tanstack/react-query";
-import axios from "axios";
 
 const useProducts = () => {
   const response = useQuery({
     queryKey: ["products"],
     queryFn: async () => {
       try {
-        const response = await axios.get("https://dummyjson.com/products");
-        return response.data.products; // Return the products directly
+        const response = await fetch("https://dummyjson.com/products");
+        if (!response.ok) {
+          throw new Error("Failed to fetch products");
+        }
+        const data = await response.json();
+        return data.products; // Return the products directly
       } catch (error) {
         console.error("Error fetching products:", error);
         return []; // Return an empty array in case of an error
       }
     },
-    refetchInterval: 3000,
-    staleTime: 10000,
-    // Uncomment and configure additional options as needed:
-    // refetchIntervalInBackground: true,
-    // retry: 6,
-    // retryDelay: 5000,
-    // gcTime: 5000,
-    // select: (data) => data.data.data,
+    refetchInterval: false, // Disable periodic refetching
+    staleTime: 10000, // Data is considered fresh for 10 seconds
+    retry: 3, // Retry failed requests up to 3 times
+    retryDelay: 1000, // Wait 1 second between retries
   });
 
   return response;
